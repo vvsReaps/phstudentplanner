@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ProfitHub Student Guide</title>
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --dim: rgba(255,255,255,.58);
+      --accent:#7C5CFF;
+      --accent2:#2EE9A6;
+      --warn:#FFB020;
+      --bad:#FF4D6D;
+      --good:#2EE9A6;
+      --radius: 18px;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% 15%, rgba(124,92,255,.28), transparent 55%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(46,233,166,.18), transparent 55%),
+        radial-gradient(900px 700px at 55% 95%, rgba(255,176,32,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 60%, #060814);
+      overflow-x:hidden;
+    }
+
+    .wrap{
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 56px 20px 70px;
+    }
+
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom: 22px;
+    }
+
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-width: min(640px, 100%);
+    }
+
+    h1{
+      margin:0;
+      font-size: clamp(26px, 3.2vw, 40px);
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+    }
+
+    .subtitle{
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+      max-width: 70ch;
+    }
+
+    .chips{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 4px;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+      font-size: 13px;
+      color: var(--muted);
+      user-select:none;
+      white-space:nowrap;
+      text-decoration:none;
+    }
+    .chip b{ color: var(--text); font-weight: 650; }
+    .chip:hover{ background: rgba(255,255,255,.08); }
+
+    .meta{
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow);
+      min-width: 260px;
+    }
+    .meta .row{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .meta .row:last-child{ border-bottom:0; }
+    .meta .k{ color: var(--dim); font-size: 12px; }
+    .meta .v{ font-family: var(--mono); font-size: 12px; color: var(--text); }
+
+    /* NEW: quick links buttons in meta */
+    .metaLinks{
+      display:grid;
+      gap:10px;
+      margin-top: 12px;
+    }
+    .metaBtn{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      text-decoration:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .metaBtn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.14);
+    }
+    .metaBtn .left{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+    .metaBtn .t{
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .metaBtn .s{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.2;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 240px;
+    }
+    .metaBtn .arrow{
+      width: 30px;
+      height: 30px;
+      border-radius: 12px;
+      display:grid;
+      place-items:center;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      flex: 0 0 auto;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .meta{ width:100%; }
+      .metaBtn .s{ max-width: 100%; }
+    }
+
+    .card{
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(800px 200px at 20% 0%, rgba(124,92,255,.18), transparent 60%),
+        radial-gradient(700px 240px at 80% 0%, rgba(46,233,166,.12), transparent 60%);
+      pointer-events:none;
+    }
+
+    .card > .inner{
+      position:relative;
+      padding: 18px 18px 16px;
+    }
+
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin: 0 0 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .sectionTitle h2{
+      margin:0;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+    }
+    .badge{
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(124,92,255,.16);
+      border: 1px solid rgba(124,92,255,.28);
+      color: rgba(255,255,255,.86);
+      white-space:nowrap;
+    }
+
+    .list{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .callout{
+      border-radius: 14px;
+      padding: 12px 12px;
+      margin-top: 12px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .callout b{ color: var(--text); }
+
+    .phase{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    details{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      overflow:hidden;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding: 14px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      font-weight: 650;
+      color: var(--text);
+      user-select:none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+
+    .sumLeft{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .pill{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      color: var(--dim);
+      white-space:nowrap;
+    }
+
+    .chev{
+      width: 26px;
+      height: 26px;
+      border-radius: 10px;
+      display:grid;
+      place-items:center;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      flex: 0 0 auto;
+      transition: transform .2s ease;
+    }
+    details[open] .chev{ transform: rotate(90deg); }
+
+    .content{
+      padding: 0 14px 14px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .content .miniTitle{
+      margin: 10px 0 6px;
+      color: var(--text);
+      font-size: 13px;
+      letter-spacing: .01em;
+    }
+
+    .content ul{
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+
+    .tagRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tag{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: var(--dim);
+    }
+    .tag.good{ border-color: rgba(46,233,166,.25); background: rgba(46,233,166,.10); color: rgba(230,255,247,.92); }
+    .tag.warn{ border-color: rgba(255,176,32,.25); background: rgba(255,176,32,.10); color: rgba(255,248,230,.92); }
+    .tag.bad{ border-color: rgba(255,77,109,.25); background: rgba(255,77,109,.10); color: rgba(255,235,240,.92); }
+
+    .sidebar{
+      display:flex;
+      flex-direction:column;
+      gap: 16px;
+    }
+
+    .check{
+      display:grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .check label{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .check label:hover{ transform: translateY(-1px); background: rgba(255,255,255,.06); }
+    .check input{
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent2);
+    }
+
+    .rules{
+      margin-top: 10px;
+      display:grid;
+      gap: 10px;
+    }
+
+    .rule{
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .rule b{ color: var(--text); }
+
+    .footer{
+      margin-top: 16px;
+      color: var(--dim);
+      font-size: 12px;
+      text-align:center;
+    }
+    .footer code{
+      font-family: var(--mono);
+      color: rgba(255,255,255,.78);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 2px 6px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div class="title">
+        <h1>📘Sean's Strategy — Step-by-Step Study Guide</h1>
+        <div class="subtitle">
+          A discipline-first plan for trading opening liquidity on <b>NQ</b> &amp; <b>YM</b>.
+          One clean trade per day. 1:1 risk-reward. Pass prop firm combines by doing less — better.
+        </div>
+
+        <div class="chips">
+          <div class="chip">🎯 <b>Goal:</b> Opening Liquidity (NQ/YM)</div>
+          <div class="chip">🧠 <b>Mindset:</b> React, don’t predict</div>
+          <div class="chip">⏱️ <b>Window:</b> 9:30–10:00 AM EST</div>
+          <div class="chip">🧾 <b>Rule:</b> 1 trade/day</div>
+        </div>
+      </div>
+
+      <aside class="meta" aria-label="Key constraints">
+        <div class="row"><div class="k">Risk model</div><div class="v">$360 risk • 1 loss = done</div></div>
+        <div class="row"><div class="k">Target</div><div class="v">1:1 R:R</div></div>
+        <div class="row"><div class="k">Instruments</div><div class="v">NQ • YM</div></div>
+        <div class="row"><div class="k">Focus</div><div class="v">Discipline &amp; execution</div></div>
+
+        <!-- ✅ Added links (Calendar / Risk Sheet / News) -->
+        <div class="metaLinks" aria-label="Quick links">
+          <a class="metaBtn" href="https://vvsSean.github.io/Calendar/" target="_blank" rel="noopener">
+            <div class="left">
+              <div class="t">📊Calendar & Journal</div>
+              <div class="s">Track stats • Journal • Review performance</div>
+            </div>
+            <div class="arrow">↗</div>
+          </a>
+
+          <a class="metaBtn" href="https://docs.google.com/spreadsheets/d/1WYSxRw6Kv0HlRYpqxvpEO1h_sZLnTZSXwA4qYgLqkYY/edit?usp=sharing" target="_blank" rel="noopener">
+            <div class="left">
+              <div class="t">🧮 Risk Sheet</div>
+              <div class="s">Position sizing • rules • risk tracking</div>
+            </div>
+            <div class="arrow">↗</div>
+          </a>
+
+          <a class="metaBtn" href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener">
+            <div class="left">
+              <div class="t">📰 News Calendar</div>
+              <div class="s">ForexFactory • check red folder events</div>
+            </div>
+            <div class="arrow">↗</div>
+          </a>
+        </div>
+      </aside>
+    </header>
+
+    <section class="grid">
+      <!-- Main -->
+      <section class="card">
+        <div class="inner">
+          <div class="sectionTitle">
+            <h2>🎯 Goal of This Strategy</h2>
+            <span class="badge">Build discipline, not hype</span>
+          </div>
+
+          <ul class="list">
+            <li>Trade opening liquidity on NQ &amp; YM</li>
+            <li>Take 1 clean trade per day</li>
+            <li>Target 1:1 risk-reward</li>
+            <li>Pass prop firm combines without overtrading</li>
+            <li>Build discipline, not hype</li>
+          </ul>
+
+          <div class="callout">
+            <b>Core idea:</b> This is a liquidity-based strategy. You are <b>not</b> predicting direction —
+            you are reacting to <b>break → retrace → continuation</b>. Your edge is <b>timing + discipline</b>, not indicators.
+          </div>
+
+          <div style="height:14px"></div>
+
+          <div class="sectionTitle">
+            <h2>📍 Phases</h2>
+            <span class="badge">Days 1–30</span>
+          </div>
+
+          <div class="phase">
+            <details open>
+              <summary>
+                <span class="sumLeft">
+                  <span class="pill">PHASE 1</span>
+                  <span>FOUNDATION (Days 1–5)</span>
+                </span>
+                <span class="chev">›</span>
+              </summary>
+              <div class="content">
+                <div class="miniTitle">1️⃣ Understand the Game You’re Playing</div>
+                <ul>
+                  <li>This is a liquidity-based strategy</li>
+                  <li>You are NOT predicting direction</li>
+                  <li>You are reacting to break → retrace → continuation</li>
+                  <li>Your edge is timing + discipline, not indicators</li>
+                </ul>
+
+                <div class="miniTitle">📌 Study:</div>
+                <ul>
+                  <li>Daily rules</li>
+                  <li>Risk model $50K ($360 risk, 1 loss = done)</li>
+                  <li>Trade window (9:30–10:45 AM EST)</li>
+                  <li>Why greed kills combines</li>
+                </ul>
+
+                <div class="callout"><b>👉 Outcome:</b> You should be able to explain why 1 trade/day works and why more trades = failure</div>
+
+                <div class="miniTitle">2️⃣ Learn the Emotional Cycle (CRITICAL)</div>
+                <div class="callout">
+                  This strategy fails mentally, not technically.<br><br>
+                  <b>Study the emotional cycle:</b>
+                  <div class="tagRow">
+                    <span class="tag">Uninformed optimism</span>
+                    <span class="tag">Informed pessimism</span>
+                    <span class="tag">Valley of despair</span>
+                    <span class="tag">Informed optimism</span>
+                    <span class="tag good">Success &amp; fulfillment</span>
+                  </div>
+                </div>
+
+                <div class="miniTitle">📌 Task:</div>
+                <ul>
+                  <li>Write down where you usually quit things</li>
+                  <li>Acknowledge that frustration ≠ failure</li>
+                </ul>
+
+                <div class="callout"><b>👉 Outcome:</b> You stop sabotaging yourself when results don’t come immediately.</div>
+              </div>
+            </details>
+
+            <details>
+              <summary>
+                <span class="sumLeft">
+                  <span class="pill">PHASE 2</span>
+                  <span>CHART LITERACY (Days 6–12)</span>
+                </span>
+                <span class="chev">›</span>
+              </summary>
+              <div class="content">
+                <div class="miniTitle">3️⃣ Master Levels (NO TRADING YET)</div>
+                <div class="callout">You must be able to mark levels without copying Discord.</div>
+
+                <div class="miniTitle">Every Night (Daily Routine): Plot</div>
+                <ul>
+                  <li>Previous day high / low</li>
+                  <li>Previous week high / low</li>
+                  <li>Daily FVGs</li>
+                  <li>4H FVGs</li>
+                </ul>
+
+                <div class="miniTitle">At 9:15 AM: Plot</div>
+                <ul>
+                  <li>1H, 30M, 15M, 5M FVGs</li>
+                  <li>Monday only: Opening gap high/low (1m)</li>
+                </ul>
+
+                <div class="callout"><b>📌 Rule:</b> If your levels don’t look similar to Sean’s → you’re not ready</div>
+                <div class="callout"><b>👉 Outcome:</b> You develop independent chart confidence</div>
+
+                <div class="miniTitle">4️⃣ Learn Liquidity vs Range Levels</div>
+                <div class="callout">
+                  On the 5-minute chart @ 9:15 AM:<br>
+                  <b>Blue lines</b> → range high &amp; low<br>
+                  <b>Green rays</b> → liquidity (wicks, chop zones)
+                </div>
+
+                <div class="miniTitle">📌 Drill:</div>
+                <ul>
+                  <li>Go back 20 trading days</li>
+                  <li>Screenshot charts</li>
+                  <li>Circle liquidity grabs manually</li>
+                </ul>
+
+                <div class="callout"><b>👉 Outcome:</b> You can visually see where stops are resting</div>
+              </div>
+            </details>
+
+            <details>
+              <summary>
+                <span class="sumLeft">
+                  <span class="pill">PHASE 3</span>
+                  <span>EXECUTION MECHANICS (Days 13–20)</span>
+                </span>
+                <span class="chev">›</span>
+              </summary>
+              <div class="content">
+                <div class="miniTitle">5️⃣ The Only Entry Model You Trade</div>
+                <div class="callout">
+                  You are waiting for THIS EXACT SEQUENCE:
+                  <div class="tagRow">
+                    <span class="tag">Market opens (9:30)</span>
+                    <span class="tag">Breaks a marked level</span>
+                    <span class="tag">Retraces</span>
+                    <span class="tag good">Second push</span>
+                    <span class="tag">Enter</span>
+                  </div>
+                </div>
+
+                <div class="miniTitle">Stop &amp; Target</div>
+                <ul>
+                  <li>Enter on second push</li>
+                  <li>Stop set FIRST</li>
+                  <li>TP at liquidity</li>
+                </ul>
+
+                <div class="callout">
+                  <b>📌 Absolute rules:</b>
+                  <div class="tagRow">
+                    <span class="tag bad">No first push entries</span>
+                    <span class="tag bad">No anticipation</span>
+                    <span class="tag bad">No chasing</span>
+                  </div>
+                </div>
+
+                <div class="callout"><b>👉 Outcome:</b> You stop gambling and start executing.</div>
+
+                <div class="miniTitle">6️⃣ Simulation ONLY (No Live Trades)</div>
+                <ul>
+                  <li>Use TradingView long/short tool</li>
+                  <li>Mark entry, SL, TP</li>
+                  <li>Log results</li>
+                </ul>
+
+                <div class="callout">
+                  <b>📌 Minimum requirement:</b> 30 simulated trades<br>
+                  <b>Standard:</b> at least 60% clean execution, not win rate
+                </div>
+
+                <div class="callout"><b>👉 Outcome:</b> You build trust in the system without emotional damage</div>
+              </div>
+            </details>
+
+            <details>
+              <summary>
+                <span class="sumLeft">
+                  <span class="pill">PHASE 4</span>
+                  <span>ADVANCED CONCEPTS (Days 21–30)</span>
+                </span>
+                <span class="chev">›</span>
+              </summary>
+              <div class="content">
+                <div class="miniTitle">7️⃣ Continuations (OPTIONAL)</div>
+                <div class="callout">Only study after consistency.</div>
+
+                <div class="miniTitle">Valid only if:</div>
+                <ul>
+                  <li>Clean structure</li>
+                  <li>Strong momentum</li>
+                  <li>Clear liquidity draw</li>
+                  <li>No messy FVGs</li>
+                </ul>
+
+                <div class="callout">
+                  <b>Rule:</b> Move SL to TP or +$500 immediately<br>
+                  <b>Trail aggressively</b>
+                </div>
+
+                <div class="callout"><b>👉 Outcome:</b> You learn to hold winners without forcing it</div>
+
+                <div class="miniTitle">8️⃣ Reversal Strategy (ADVANCED)</div>
+                <div class="miniTitle">Conditions:</div>
+                <ul>
+                  <li>Strong impulsive move (200+ pts)</li>
+                  <li>Switch to 1-minute chart</li>
+                  <li>Identify exhaustion FVGs and a Key Level</li>
+                  <li>Break → retrace → second push</li>
+                </ul>
+
+                <div class="callout"><b>📌 Warning:</b> This is NOT for beginners. Master opening liquidity first.</div>
+              </div>
+            </details>
+
+            <details>
+              <summary>
+                <span class="sumLeft">
+                  <span class="pill">PHASE 5</span>
+                  <span>GO LIVE (ONLY AFTER THIS)</span>
+                </span>
+                <span class="chev">›</span>
+              </summary>
+              <div class="content">
+                <div class="miniTitle">9️⃣ Live Trading Rules</div>
+                <ul>
+                  <li>1 loss = stop</li>
+                  <li>1 win = stop</li>
+                  <li>No Fridays</li>
+                  <li>Half Risk on Mondays | 1 NQ or 2 YM per $50K</li>
+                  <li>No news trades</li>
+                  <li>No revenge trades</li>
+                </ul>
+
+                <div class="callout">
+                  <b>📌 Daily question:</b> “Is this worth the risk?”<br>
+                  If not → <b>no trade.</b>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <section class="card">
+          <div class="inner">
+            <div class="sectionTitle">
+              <h2>🧠 DAILY STUDY CHECKLIST</h2>
+              <span class="badge">Do this daily</span>
+            </div>
+            <div class="check">
+              <label><input type="checkbox"> ✅ Mark levels</label>
+              <label><input type="checkbox"> ✅ Check news</label>
+              <label><input type="checkbox"> ✅ Identify liquidity</label>
+              <label><input type="checkbox"> ✅ Wait for open</label>
+              <label><input type="checkbox"> ✅ Execute OR do nothing</label>
+              <label><input type="checkbox"> ✅ Journal screenshot</label>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="inner">
+            <div class="sectionTitle">
+              <h2>❌ COMMON FAILURE POINTS</h2>
+              <span class="badge">Avoid these</span>
+            </div>
+            <div class="rules">
+              <div class="rule">❌ <b>Overtrading</b></div>
+              <div class="rule">❌ <b>Moving stop too early</b></div>
+              <div class="rule">❌ <b>Forcing entries</b></div>
+              <div class="rule">❌ <b>Chasing YM/NQ</b></div>
+              <div class="rule">❌ <b>Trading emotions</b> instead of rules</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="inner">
+            <div class="sectionTitle">
+              <h2>🏁 FINAL TRUTH</h2>
+              <span class="badge">Remember</span>
+            </div>
+            <div class="callout" style="margin-top:10px">
+              This strategy works best when you trade <b>LESS</b>.
+            </div>
+
+            <div class="rule" style="margin-top:10px">
+              You are not here to:<br>
+              ❌ be right<br>
+              ❌ trade every day<br>
+              ❌ impress anyone
+            </div>
+
+            <div class="rule" style="margin-top:10px">
+              You are here to:<br>
+              ✅ pass combines<br>
+              ✅ build consistency<br>
+              ✅ scale safely
+            </div>
+
+            <div class="footer">
+              TIP: Join the Discord calls and ask questions!
+              <br><br>
+              Shortcut: press <code>Ctrl</code>/<code>Cmd</code> + <code>F</code> to find any phase quickly.
+            </div>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>
